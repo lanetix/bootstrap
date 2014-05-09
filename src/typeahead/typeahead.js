@@ -41,7 +41,8 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //SUPPORTED ATTRIBUTES (OPTIONS)
 
       //minimal no of characters that needs to be entered before typeahead kicks-in
-      var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
+      var minSearch = originalScope.$eval(attrs.typeaheadMinLength);
+      minSearch = minSearch === 0 ? minSearch : minSearch || 1;
 
       //minimal wait time after last character typed before typehead kicks-in
       var waitTime = originalScope.$eval(attrs.typeaheadWaitMs) || 0;
@@ -170,7 +171,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //we need to propagate user's query so we can higlight matches
       scope.query = undefined;
 
-      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later 
+      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later
       var timeoutPromise;
 
       var scheduleSearchWithTimeout = function(inputValue) {
@@ -185,13 +186,21 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         }
       };
 
+      if (minSearch === 0) {
+        element.bind('focus', function () {
+          hasFocus = true;
+          // We don't wait (using waitTime) since this is on focus and not on key click.
+          getMatchesAsync(modelCtrl.$viewValue);
+        });
+      }
+
       //plug into $parsers pipeline to open a typeahead on view changes initiated from DOM
       //$parsers kick-in on all the changes coming from the view as well as manually triggered by $setViewValue
       modelCtrl.$parsers.unshift(function (inputValue) {
 
         hasFocus = true;
 
-        if (inputValue && inputValue.length >= minSearch) {
+        if (minSearch === 0 || inputValue && inputValue.length >= minSearch) {
           if (waitTime > 0) {
             cancelPreviousTimeout();
             scheduleSearchWithTimeout(inputValue);
