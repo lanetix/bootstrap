@@ -283,12 +283,23 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
         evt.preventDefault();
 
+        var i;
         if (evt.which === 40) {
-          scope.activeIdx = (scope.activeIdx + 1) % scope.matches.length;
+          for (i = 0; i < scope.matches.length; i++) {
+            scope.activeIdx = (scope.activeIdx + 1) % scope.matches.length;
+            if (!scope.matches[scope.activeIdx].model.notSelectable) {
+              break;
+            }
+          }
           scope.$digest();
 
         } else if (evt.which === 38) {
-          scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
+          for (i = 0; i < scope.matches.length; i++) {
+            scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
+            if (!scope.matches[scope.activeIdx].model.notSelectable) {
+              break;
+            }
+          }
           scope.$digest();
 
         } else if (evt.which === 13 || evt.which === 9) {
