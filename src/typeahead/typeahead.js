@@ -316,6 +316,12 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
             scope.select(scope.activeIdx);
           });
 
+          // use timeout to avoid $rootScope:inprog error
+          if (!isFocusAfterSelect) {
+            $timeout(function () {
+              element[0].blur();
+            }, 0, false);
+          }
         } else if (evt.which === 27) {
           evt.stopPropagation();
 
