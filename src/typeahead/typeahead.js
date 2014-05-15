@@ -60,6 +60,8 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
       var appendToBody =  attrs.typeaheadAppendToBody ? originalScope.$eval(attrs.typeaheadAppendToBody) : false;
 
+      var isFocusAfterSelect = originalScope.$eval(attrs.typeaheadFocusAfterSelect) !== false;
+
       //INTERNAL VARIABLES
 
       //model setter executed upon match selection
@@ -270,7 +272,11 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
         //return focus to the input element if a match was selected via a mouse click event
         // use timeout to avoid $rootScope:inprog error
-        $timeout(function() { element[0].focus(); }, 0, false);
+        if (isFocusAfterSelect) {
+          $timeout(function () {
+            element[0].focus();
+          }, 0, false);
+        }
       };
 
       //bind keyboard events: arrows up(38) / down(40), enter(13) and tab(9), esc(27)
