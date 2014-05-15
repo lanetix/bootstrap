@@ -62,6 +62,8 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
       var isFocusAfterSelect = originalScope.$eval(attrs.typeaheadFocusAfterSelect) !== false;
 
+      var leftOffset = originalScope.$eval(attrs.typeaheadPopupLeftOffset) || 0;
+
       //INTERNAL VARIABLES
 
       //model setter executed upon match selection
@@ -153,6 +155,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
               //due to other elements being rendered
               scope.position = appendToBody ? $position.offset(element) : $position.position(element);
               scope.position.top = scope.position.top + element.prop('offsetHeight');
+              scope.position.left = scope.position.left + leftOffset;
 
               element.attr('aria-expanded', true);
             } else {
