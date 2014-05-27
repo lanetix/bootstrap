@@ -84,7 +84,10 @@ angular.module('ui.bootstrap.timepicker', [])
 
   function getMinutesFromTemplate() {
     var minutes = parseInt($scope.minutes, 10);
-    return ( minutes >= 0 && minutes < 60 ) ? minutes : undefined;
+    return ( minutes >= 0 && minutes < 60 ) ?
+      // add leading 0 to minutes 0-9 to show 2 digit minute value (ex: 07)
+      ((minutes < 10 ) ? '0' + minutes : minutes)
+      : undefined;
   }
 
   function pad( value ) {
