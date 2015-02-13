@@ -13,9 +13,7 @@ lib-cov
 pids
 logs
 results
-dist/*.html
-dist/*SNAPSHOT.js
-dist/assets
+dist
 # test coverage files
 coverage/
 

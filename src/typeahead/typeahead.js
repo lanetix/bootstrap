@@ -60,6 +60,8 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
 
           var appendToBody = attrs.typeaheadAppendToBody ? originalScope.$eval(attrs.typeaheadAppendToBody) : false;
 
+          var focusFirst = originalScope.$eval(attrs.typeaheadFocusFirst) !== false;
+
           var isFocusAfterSelect = originalScope.$eval(attrs.typeaheadFocusAfterSelect) !== false;
 
           var leftOffset = originalScope.$eval(attrs.typeaheadPopupLeftOffset) || 0;
@@ -136,7 +138,7 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
               if (onCurrentRequest && hasFocus) {
                 if (matches.length > 0) {
 
-                  scope.activeIdx = 0;
+                  scope.activeIdx = focusFirst ? 0 : -1;
                   scope.matches.length = 0;
 
                   //transform labels
@@ -239,7 +241,7 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
 
             if (inputFormatter) {
 
-              locals['$model'] = modelValue;
+              locals.$model = modelValue;
               return inputFormatter(originalScope, locals);
 
             } else {
@@ -290,6 +292,11 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
               return;
             }
 
+            // if there's nothing selected (i.e. focusFirst) and enter is hit, don't do anything
+            if (scope.activeIdx == -1 && (evt.which === 13 || evt.which === 9)) {
+              return;
+            }
+
             evt.preventDefault();
 
             var i;
@@ -305,7 +312,7 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
             } else if (evt.which === 38) {
               for (i = 0; i < scope.matches.length; i++) {
                 scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
-                if (!scope.matches[scope.activeIdx].model.notSelectable) {
+                if (scope.matches[scope.activeIdx] && !scope.matches[scope.activeIdx].model.notSelectable) {
                   break;
                 }
               }
@@ -346,6 +353,9 @@ angular.module('lx.ui.bootstrap.typeahead', ['lx.ui.bootstrap.position', 'lx.ui.
 
           originalScope.$on('$destroy', function () {
             $document.unbind('click', dismissClickHandler);
+            if (appendToBody) {
+              $popup.remove();
+            }
           });
 
           var $popup = $compile(popUpEl)(scope);

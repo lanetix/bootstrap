@@ -9,12 +9,10 @@ angular.module('lx.ui.bootstrap.demo').controller('TypeaheadCtrl', function ($sc
         address: val,
         sensor: false
       }
-    }).then(function (res) {
-      var addresses = [];
-      angular.forEach(res.data.results, function (item) {
-        addresses.push(item.formatted_address);
+    }).then(function (response) {
+      return response.data.results.map(function (item) {
+        return item.formatted_address;
       });
-      return addresses;
     });
   };
 
