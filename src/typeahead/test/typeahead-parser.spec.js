@@ -2,7 +2,7 @@ describe('syntax parser', function () {
 
   var typeaheadParser, scope, filterFilter;
 
-  beforeEach(module('ui.bootstrap.typeahead'));
+  beforeEach(module('lx.ui.bootstrap.typeahead'));
   beforeEach(inject(function (_$rootScope_, _filterFilter_, _typeaheadParser_) {
     typeaheadParser = _typeaheadParser_;
     scope = _$rootScope_;
@@ -14,7 +14,7 @@ describe('syntax parser', function () {
     var result = typeaheadParser.parse('state for state in states | filter:$viewValue');
 
     var itemName = result.itemName;
-    var locals = {$viewValue:'al'};
+    var locals = {$viewValue: 'al'};
     expect(result.source(scope, locals)).toEqual(['Alabama', 'California']);
 
     locals[itemName] = 'Alabama';
@@ -29,7 +29,7 @@ describe('syntax parser', function () {
     var result = typeaheadParser.parse('state for state in getStates($viewValue)');
 
     var itemName = result.itemName;
-    var locals = {$viewValue:'al'};
+    var locals = {$viewValue: 'al'};
     expect(result.source(scope, locals)).toEqual(['Alabama', 'California']);
 
     locals[itemName] = 'Alabama';
@@ -40,21 +40,21 @@ describe('syntax parser', function () {
   it('should allow to specify custom model mapping that is used as a label as well', function () {
 
     scope.states = [
-      {code:'AL', name:'Alabama'},
-      {code:'CA', name:'California'},
-      {code:'DE', name:'Delaware'}
+      {code: 'AL', name: 'Alabama'},
+      {code: 'CA', name: 'California'},
+      {code: 'DE', name: 'Delaware'}
     ];
     var result = typeaheadParser.parse('state.name for state in states | filter:$viewValue | orderBy:"name":true');
 
     var itemName = result.itemName;
     expect(itemName).toEqual('state');
-    expect(result.source(scope, {$viewValue:'al'})).toEqual([
-      {code:'CA', name:'California'},
-      {code:'AL', name:'Alabama'}
+    expect(result.source(scope, {$viewValue: 'al'})).toEqual([
+      {code: 'CA', name: 'California'},
+      {code: 'AL', name: 'Alabama'}
     ]);
 
-    var locals = {$viewValue:'al'};
-    locals[itemName] = {code:'AL', name:'Alabama'};
+    var locals = {$viewValue: 'al'};
+    locals[itemName] = {code: 'AL', name: 'Alabama'};
     expect(result.viewMapper(scope, locals)).toEqual('Alabama');
     expect(result.modelMapper(scope, locals)).toEqual('Alabama');
   });
@@ -62,20 +62,20 @@ describe('syntax parser', function () {
   it('should allow to specify custom view and model mappers', function () {
 
     scope.states = [
-      {code:'AL', name:'Alabama'},
-      {code:'CA', name:'California'},
-      {code:'DE', name:'Delaware'}
+      {code: 'AL', name: 'Alabama'},
+      {code: 'CA', name: 'California'},
+      {code: 'DE', name: 'Delaware'}
     ];
     var result = typeaheadParser.parse('state.code as state.name + " ("+state.code+")" for state in states | filter:$viewValue | orderBy:"name":true');
 
     var itemName = result.itemName;
-    expect(result.source(scope, {$viewValue:'al'})).toEqual([
-      {code:'CA', name:'California'},
-      {code:'AL', name:'Alabama'}
+    expect(result.source(scope, {$viewValue: 'al'})).toEqual([
+      {code: 'CA', name: 'California'},
+      {code: 'AL', name: 'Alabama'}
     ]);
 
-    var locals = {$viewValue:'al'};
-    locals[itemName] = {code:'AL', name:'Alabama'};
+    var locals = {$viewValue: 'al'};
+    locals[itemName] = {code: 'AL', name: 'Alabama'};
     expect(result.viewMapper(scope, locals)).toEqual('Alabama (AL)');
     expect(result.modelMapper(scope, locals)).toEqual('AL');
   });

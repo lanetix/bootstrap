@@ -1,12 +1,12 @@
 describe('datepicker directive', function () {
   var $rootScope, $compile, element;
-  beforeEach(module('ui.bootstrap.datepicker'));
+  beforeEach(module('lx.ui.bootstrap.datepicker'));
   beforeEach(module('template/datepicker/datepicker.html'));
   beforeEach(module('template/datepicker/day.html'));
   beforeEach(module('template/datepicker/month.html'));
   beforeEach(module('template/datepicker/year.html'));
   beforeEach(module('template/datepicker/popup.html'));
-  beforeEach(inject(function(_$compile_, _$rootScope_) {
+  beforeEach(inject(function (_$compile_, _$rootScope_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     $rootScope.date = new Date('September 30, 2010 15:30:00');
@@ -37,48 +37,48 @@ describe('datepicker directive', function () {
 
   function getLabels() {
     var els = getLabelsRow().find('th'),
-        labels = [];
+      labels = [];
     for (var i = 1, n = els.length; i < n; i++) {
-      labels.push( els.eq(i).text() );
+      labels.push(els.eq(i).text());
     }
     return labels;
   }
 
   function getWeeks() {
     var rows = element.find('tbody').find('tr'),
-        weeks = [];
+      weeks = [];
     for (var i = 0, n = rows.length; i < n; i++) {
-      weeks.push( rows.eq(i).find('td').eq(0).first().text() );
+      weeks.push(rows.eq(i).find('td').eq(0).first().text());
     }
     return weeks;
   }
 
-  function getOptions( dayMode ) {
+  function getOptions(dayMode) {
     var tr = element.find('tbody').find('tr');
     var rows = [];
 
     for (var j = 0, numRows = tr.length; j < numRows; j++) {
       var cols = tr.eq(j).find('td'), days = [];
       for (var i = dayMode ? 1 : 0, n = cols.length; i < n; i++) {
-        days.push( cols.eq(i).find('button').text() );
+        days.push(cols.eq(i).find('button').text());
       }
       rows.push(days);
     }
     return rows;
   }
 
-  function clickOption( index ) {
+  function clickOption(index) {
     getAllOptionsEl().eq(index).click();
   }
 
-  function getAllOptionsEl( dayMode ) {
+  function getAllOptionsEl(dayMode) {
     return element.find('tbody').find('button');
   }
 
-  function expectSelectedElement( index ) {
+  function expectSelectedElement(index) {
     var buttons = getAllOptionsEl();
-    angular.forEach( buttons, function( button, idx ) {
-      expect(angular.element(button).hasClass('btn-info')).toBe( idx === index );
+    angular.forEach(buttons, function (button, idx) {
+      expect(angular.element(button).hasClass('btn-info')).toBe(idx === index);
     });
   }
 
@@ -105,25 +105,25 @@ describe('datepicker directive', function () {
   }
 
   describe('', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       element = $compile('<datepicker ng-model="date"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('is has a `<table>` element', function() {
+    it('is has a `<table>` element', function () {
       expect(element.find('table').length).toBe(1);
     });
 
-    it('shows the correct title', function() {
+    it('shows the correct title', function () {
       expect(getTitle()).toBe('September 2010');
     });
 
-    it('shows the label row & the correct day labels', function() {
+    it('shows the label row & the correct day labels', function () {
       expect(getLabelsRow().css('display')).not.toBe('none');
       expect(getLabels()).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
     });
 
-    it('renders the calendar days correctly', function() {
+    it('renders the calendar days correctly', function () {
       expect(getOptions(true)).toEqual([
         ['29', '30', '31', '01', '02', '03', '04'],
         ['05', '06', '07', '08', '09', '10', '11'],
@@ -134,27 +134,27 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('renders the week numbers based on ISO 8601', function() {
+    it('renders the week numbers based on ISO 8601', function () {
       expect(getWeeks()).toEqual(['34', '35', '36', '37', '38', '39']);
     });
 
-    it('value is correct', function() {
+    it('value is correct', function () {
       expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
     });
 
-    it('has `selected` only the correct day', function() {
-      expectSelectedElement( 32 );
+    it('has `selected` only the correct day', function () {
+      expectSelectedElement(32);
     });
 
-    it('has no `selected` day when model is cleared', function() {
+    it('has no `selected` day when model is cleared', function () {
       $rootScope.date = null;
       $rootScope.$digest();
 
       expect($rootScope.date).toBe(null);
-      expectSelectedElement( null );
+      expectSelectedElement(null);
     });
 
-    it('does not change current view when model is cleared', function() {
+    it('does not change current view when model is cleared', function () {
       $rootScope.date = null;
       $rootScope.$digest();
 
@@ -162,19 +162,19 @@ describe('datepicker directive', function () {
       expect(getTitle()).toBe('September 2010');
     });
 
-    it('`disables` visible dates from other months', function() {
+    it('`disables` visible dates from other months', function () {
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).find('span').hasClass('text-muted')).toBe( index < 3 || index > 32 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).find('span').hasClass('text-muted')).toBe(index < 3 || index > 32);
       });
     });
 
-    it('updates the model when a day is clicked', function() {
-      clickOption( 17 );
+    it('updates the model when a day is clicked', function () {
+      clickOption(17);
       expect($rootScope.date).toEqual(new Date('September 15, 2010 15:30:00'));
     });
 
-    it('moves to the previous month & renders correctly when `previous` button is clicked', function() {
+    it('moves to the previous month & renders correctly when `previous` button is clicked', function () {
       clickPreviousButton();
 
       expect(getTitle()).toBe('August 2010');
@@ -188,18 +188,18 @@ describe('datepicker directive', function () {
         ['05', '06', '07', '08', '09', '10', '11']
       ]);
 
-      expectSelectedElement( null, null );
+      expectSelectedElement(null, null);
     });
 
-    it('updates the model only when a day is clicked in the `previous` month', function() {
+    it('updates the model only when a day is clicked in the `previous` month', function () {
       clickPreviousButton();
       expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
 
-      clickOption( 17 );
+      clickOption(17);
       expect($rootScope.date).toEqual(new Date('August 18, 2010 15:30:00'));
     });
 
-    it('moves to the next month & renders correctly when `next` button is clicked', function() {
+    it('moves to the next month & renders correctly when `next` button is clicked', function () {
       clickNextButton();
 
       expect(getTitle()).toBe('October 2010');
@@ -213,19 +213,19 @@ describe('datepicker directive', function () {
         ['31', '01', '02', '03', '04', '05', '06']
       ]);
 
-      expectSelectedElement( 4 );
+      expectSelectedElement(4);
     });
 
-    it('updates the model only when a day is clicked in the `next` month', function() {
+    it('updates the model only when a day is clicked in the `next` month', function () {
       clickNextButton();
       expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
 
-      clickOption( 17 );
+      clickOption(17);
       expect($rootScope.date).toEqual(new Date('October 13, 2010 15:30:00'));
     });
 
-    it('updates the calendar when a day of another month is selected', function() {
-      clickOption( 33 );
+    it('updates the calendar when a day of another month is selected', function () {
+      clickOption(33);
       expect($rootScope.date).toEqual(new Date('October 01, 2010 15:30:00'));
       expect(getTitle()).toBe('October 2010');
       expect(getLabels()).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
@@ -238,11 +238,11 @@ describe('datepicker directive', function () {
         ['31', '01', '02', '03', '04', '05', '06']
       ]);
 
-      expectSelectedElement( 5 );
+      expectSelectedElement(5);
     });
 
     // issue #1697
-    it('should not "jump" months', function() {
+    it('should not "jump" months', function () {
       $rootScope.date = new Date('January 30, 2014');
       $rootScope.$digest();
       clickNextButton();
@@ -263,18 +263,18 @@ describe('datepicker directive', function () {
           ['04', '05', '06', '07', '08', '09', '10']
         ]);
 
-        expectSelectedElement( 8 );
+        expectSelectedElement(8);
       }
 
-      describe('to a Date object', function() {
-        it('updates', function() {
+      describe('to a Date object', function () {
+        it('updates', function () {
           $rootScope.date = new Date('November 7, 2005 23:30:00');
           $rootScope.$digest();
           testCalendar();
           expect(angular.isDate($rootScope.date)).toBe(true);
         });
 
-        it('to a date that is invalid, it gets invalid', function() {
+        it('to a date that is invalid, it gets invalid', function () {
           $rootScope.date = new Date('pizza');
           $rootScope.$digest();
           expect(element.hasClass('ng-invalid')).toBeTruthy();
@@ -284,23 +284,23 @@ describe('datepicker directive', function () {
         });
       });
 
-      describe('not to a Date object', function() {
+      describe('not to a Date object', function () {
 
-        it('to a Number, it updates calendar', function() {
+        it('to a Number, it updates calendar', function () {
           $rootScope.date = parseInt((new Date('November 7, 2005 23:30:00')).getTime(), 10);
           $rootScope.$digest();
           testCalendar();
           expect(angular.isNumber($rootScope.date)).toBe(true);
         });
 
-        it('to a string that can be parsed by Date, it updates calendar', function() {
+        it('to a string that can be parsed by Date, it updates calendar', function () {
           $rootScope.date = 'November 7, 2005 23:30:00';
           $rootScope.$digest();
           testCalendar();
           expect(angular.isString($rootScope.date)).toBe(true);
         });
 
-        it('to a string that cannot be parsed by Date, it gets invalid', function() {
+        it('to a string that cannot be parsed by Date, it gets invalid', function () {
           $rootScope.date = 'pizza';
           $rootScope.$digest();
           expect(element.hasClass('ng-invalid')).toBeTruthy();
@@ -310,7 +310,7 @@ describe('datepicker directive', function () {
       });
     });
 
-    it('does not loop between after max mode', function() {
+    it('does not loop between after max mode', function () {
       expect(getTitle()).toBe('September 2010');
 
       clickTitleButton();
@@ -324,15 +324,15 @@ describe('datepicker directive', function () {
     });
 
     describe('month selection mode', function () {
-      beforeEach(function() {
+      beforeEach(function () {
         clickTitleButton();
       });
 
-      it('shows the year as title', function() {
+      it('shows the year as title', function () {
         expect(getTitle()).toBe('2010');
       });
 
-      it('shows months as options', function() {
+      it('shows months as options', function () {
         expect(getOptions()).toEqual([
           ['January', 'February', 'March'],
           ['April', 'May', 'June'],
@@ -341,15 +341,15 @@ describe('datepicker directive', function () {
         ]);
       });
 
-      it('does not change the model', function() {
+      it('does not change the model', function () {
         expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
       });
 
-      it('has `selected` only the correct month', function() {
-        expectSelectedElement( 8 );
+      it('has `selected` only the correct month', function () {
+        expectSelectedElement(8);
       });
 
-      it('moves to the previous year when `previous` button is clicked', function() {
+      it('moves to the previous year when `previous` button is clicked', function () {
         clickPreviousButton();
 
         expect(getTitle()).toBe('2009');
@@ -360,10 +360,10 @@ describe('datepicker directive', function () {
           ['October', 'November', 'December']
         ]);
 
-        expectSelectedElement( null );
+        expectSelectedElement(null);
       });
 
-      it('moves to the next year when `next` button is clicked', function() {
+      it('moves to the next year when `next` button is clicked', function () {
         clickNextButton();
 
         expect(getTitle()).toBe('2011');
@@ -374,14 +374,14 @@ describe('datepicker directive', function () {
           ['October', 'November', 'December']
         ]);
 
-        expectSelectedElement( null );
+        expectSelectedElement(null);
       });
 
-      it('renders correctly when a month is clicked', function() {
+      it('renders correctly when a month is clicked', function () {
         clickPreviousButton(5);
         expect(getTitle()).toBe('2005');
 
-        clickOption( 10 );
+        clickOption(10);
         expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
         expect(getTitle()).toBe('November 2005');
         expect(getOptions(true)).toEqual([
@@ -393,22 +393,22 @@ describe('datepicker directive', function () {
           ['04', '05', '06', '07', '08', '09', '10']
         ]);
 
-        clickOption( 17 );
+        clickOption(17);
         expect($rootScope.date).toEqual(new Date('November 16, 2005 15:30:00'));
       });
     });
 
     describe('year selection mode', function () {
-      beforeEach(function() {
+      beforeEach(function () {
         clickTitleButton();
         clickTitleButton();
       });
 
-      it('shows the year range as title', function() {
+      it('shows the year range as title', function () {
         expect(getTitle()).toBe('2001 - 2020');
       });
 
-      it('shows years as options', function() {
+      it('shows years as options', function () {
         expect(getOptions()).toEqual([
           ['2001', '2002', '2003', '2004', '2005'],
           ['2006', '2007', '2008', '2009', '2010'],
@@ -417,15 +417,15 @@ describe('datepicker directive', function () {
         ]);
       });
 
-      it('does not change the model', function() {
+      it('does not change the model', function () {
         expect($rootScope.date).toEqual(new Date('September 30, 2010 15:30:00'));
       });
 
-      it('has `selected` only the selected year', function() {
-        expectSelectedElement( 9 );
+      it('has `selected` only the selected year', function () {
+        expectSelectedElement(9);
       });
 
-      it('moves to the previous year set when `previous` button is clicked', function() {
+      it('moves to the previous year set when `previous` button is clicked', function () {
         clickPreviousButton();
 
         expect(getTitle()).toBe('1981 - 2000');
@@ -435,10 +435,10 @@ describe('datepicker directive', function () {
           ['1991', '1992', '1993', '1994', '1995'],
           ['1996', '1997', '1998', '1999', '2000']
         ]);
-        expectSelectedElement( null );
+        expectSelectedElement(null);
       });
 
-      it('moves to the next year set when `next` button is clicked', function() {
+      it('moves to the next year set when `next` button is clicked', function () {
         clickNextButton();
 
         expect(getTitle()).toBe('2021 - 2040');
@@ -449,69 +449,69 @@ describe('datepicker directive', function () {
           ['2036', '2037', '2038', '2039', '2040']
         ]);
 
-        expectSelectedElement( null );
+        expectSelectedElement(null);
       });
     });
 
-    describe('keyboard navigation', function() {
+    describe('keyboard navigation', function () {
       function getActiveLabel() {
         return element.find('.active').eq(0).text();
       }
 
-      describe('day mode', function() {
-        it('will be able to activate previous day', function() {
+      describe('day mode', function () {
+        it('will be able to activate previous day', function () {
           triggerKeyDown(element, 'left');
           expect(getActiveLabel()).toBe('29');
         });
 
-        it('will be able to select with enter', function() {
+        it('will be able to select with enter', function () {
           triggerKeyDown(element, 'left');
           triggerKeyDown(element, 'enter');
           expect($rootScope.date).toEqual(new Date('September 29, 2010 15:30:00'));
         });
 
-        it('will be able to select with space', function() {
+        it('will be able to select with space', function () {
           triggerKeyDown(element, 'left');
           triggerKeyDown(element, 'space');
           expect($rootScope.date).toEqual(new Date('September 29, 2010 15:30:00'));
         });
 
-        it('will be able to activate next day', function() {
+        it('will be able to activate next day', function () {
           triggerKeyDown(element, 'right');
           expect(getActiveLabel()).toBe('01');
           expect(getTitle()).toBe('October 2010');
         });
 
-        it('will be able to activate same day in previous week', function() {
+        it('will be able to activate same day in previous week', function () {
           triggerKeyDown(element, 'up');
           expect(getActiveLabel()).toBe('23');
         });
 
-        it('will be able to activate same day in next week', function() {
+        it('will be able to activate same day in next week', function () {
           triggerKeyDown(element, 'down');
           expect(getActiveLabel()).toBe('07');
           expect(getTitle()).toBe('October 2010');
         });
 
-        it('will be able to activate same date in previous month', function() {
+        it('will be able to activate same date in previous month', function () {
           triggerKeyDown(element, 'pageup');
           expect(getActiveLabel()).toBe('30');
           expect(getTitle()).toBe('August 2010');
         });
 
-        it('will be able to activate same date in next month', function() {
+        it('will be able to activate same date in next month', function () {
           triggerKeyDown(element, 'pagedown');
           expect(getActiveLabel()).toBe('30');
           expect(getTitle()).toBe('October 2010');
         });
 
-        it('will be able to activate first day of the month', function() {
+        it('will be able to activate first day of the month', function () {
           triggerKeyDown(element, 'home');
           expect(getActiveLabel()).toBe('01');
           expect(getTitle()).toBe('September 2010');
         });
 
-        it('will be able to activate last day of the month', function() {
+        it('will be able to activate last day of the month', function () {
           $rootScope.date = new Date('September 1, 2010 15:30:00');
           $rootScope.$digest();
 
@@ -520,81 +520,81 @@ describe('datepicker directive', function () {
           expect(getTitle()).toBe('September 2010');
         });
 
-        it('will be able to move to month mode', function() {
+        it('will be able to move to month mode', function () {
           triggerKeyDown(element, 'up', true);
           expect(getActiveLabel()).toBe('September');
           expect(getTitle()).toBe('2010');
         });
 
-        it('will not respond when trying to move to lower mode', function() {
+        it('will not respond when trying to move to lower mode', function () {
           triggerKeyDown(element, 'down', true);
           expect(getActiveLabel()).toBe('30');
           expect(getTitle()).toBe('September 2010');
         });
       });
 
-      describe('month mode', function() {
-        beforeEach(function() {
+      describe('month mode', function () {
+        beforeEach(function () {
           triggerKeyDown(element, 'up', true);
         });
 
-        it('will be able to activate previous month', function() {
+        it('will be able to activate previous month', function () {
           triggerKeyDown(element, 'left');
           expect(getActiveLabel()).toBe('August');
         });
 
-        it('will be able to activate next month', function() {
+        it('will be able to activate next month', function () {
           triggerKeyDown(element, 'right');
           expect(getActiveLabel()).toBe('October');
         });
 
-        it('will be able to activate same month in previous row', function() {
+        it('will be able to activate same month in previous row', function () {
           triggerKeyDown(element, 'up');
           expect(getActiveLabel()).toBe('June');
         });
 
-        it('will be able to activate same month in next row', function() {
+        it('will be able to activate same month in next row', function () {
           triggerKeyDown(element, 'down');
           expect(getActiveLabel()).toBe('December');
         });
 
-        it('will be able to activate same date in previous year', function() {
+        it('will be able to activate same date in previous year', function () {
           triggerKeyDown(element, 'pageup');
           expect(getActiveLabel()).toBe('September');
           expect(getTitle()).toBe('2009');
         });
 
-        it('will be able to activate same date in next year', function() {
+        it('will be able to activate same date in next year', function () {
           triggerKeyDown(element, 'pagedown');
           expect(getActiveLabel()).toBe('September');
           expect(getTitle()).toBe('2011');
         });
 
-        it('will be able to activate first month of the year', function() {
+        it('will be able to activate first month of the year', function () {
           triggerKeyDown(element, 'home');
           expect(getActiveLabel()).toBe('January');
           expect(getTitle()).toBe('2010');
         });
 
-        it('will be able to activate last month of the year', function() {
+        it('will be able to activate last month of the year', function () {
           triggerKeyDown(element, 'end');
           expect(getActiveLabel()).toBe('December');
           expect(getTitle()).toBe('2010');
         });
 
-        it('will be able to move to year mode', function() {
+        it('will be able to move to year mode', function () {
           triggerKeyDown(element, 'up', true);
           expect(getActiveLabel()).toBe('2010');
           expect(getTitle()).toBe('2001 - 2020');
         });
 
-        it('will be able to move to day mode', function() {
+        it('will be able to move to day mode', function () {
           triggerKeyDown(element, 'down', true);
           expect(getActiveLabel()).toBe('30');
           expect(getTitle()).toBe('September 2010');
         });
 
-        it('will move to day mode when selecting', function() {
+        it('will move to day mode when selecting', function () {
           triggerKeyDown(element, 'left', true);
           triggerKeyDown(element, 'enter', true);
           expect(getActiveLabel()).toBe('30');
@@ -603,64 +603,64 @@ describe('datepicker directive', function () {
         });
       });
 
-      describe('year mode', function() {
-        beforeEach(function() {
+      describe('year mode', function () {
+        beforeEach(function () {
           triggerKeyDown(element, 'up', true);
           triggerKeyDown(element, 'up', true);
         });
 
-        it('will be able to activate previous year', function() {
+        it('will be able to activate previous year', function () {
           triggerKeyDown(element, 'left');
           expect(getActiveLabel()).toBe('2009');
         });
 
-        it('will be able to activate next year', function() {
+        it('will be able to activate next year', function () {
           triggerKeyDown(element, 'right');
           expect(getActiveLabel()).toBe('2011');
         });
 
-        it('will be able to activate same year in previous row', function() {
+        it('will be able to activate same year in previous row', function () {
           triggerKeyDown(element, 'up');
           expect(getActiveLabel()).toBe('2005');
         });
 
-        it('will be able to activate same year in next row', function() {
+        it('will be able to activate same year in next row', function () {
           triggerKeyDown(element, 'down');
           expect(getActiveLabel()).toBe('2015');
         });
 
-        it('will be able to activate same date in previous view', function() {
+        it('will be able to activate same date in previous view', function () {
           triggerKeyDown(element, 'pageup');
           expect(getActiveLabel()).toBe('1990');
         });
 
-        it('will be able to activate same date in next view', function() {
+        it('will be able to activate same date in next view', function () {
           triggerKeyDown(element, 'pagedown');
           expect(getActiveLabel()).toBe('2030');
         });
 
-        it('will be able to activate first year of the year', function() {
+        it('will be able to activate first year of the year', function () {
           triggerKeyDown(element, 'home');
           expect(getActiveLabel()).toBe('2001');
         });
 
-        it('will be able to activate last year of the year', function() {
+        it('will be able to activate last year of the year', function () {
           triggerKeyDown(element, 'end');
           expect(getActiveLabel()).toBe('2020');
         });
 
-        it('will not respond when trying to move to upper mode', function() {
+        it('will not respond when trying to move to upper mode', function () {
           triggerKeyDown(element, 'up', true);
           expect(getTitle()).toBe('2001 - 2020');
         });
 
-        it('will be able to move to month mode', function() {
+        it('will be able to move to month mode', function () {
           triggerKeyDown(element, 'down', true);
           expect(getActiveLabel()).toBe('September');
           expect(getTitle()).toBe('2010');
         });
 
-        it('will move to month mode when selecting', function() {
+        it('will move to month mode when selecting', function () {
           triggerKeyDown(element, 'left', true);
           triggerKeyDown(element, 'enter', true);
           expect(getActiveLabel()).toBe('September');
@@ -669,13 +669,13 @@ describe('datepicker directive', function () {
         });
       });
 
-      describe('`aria-activedescendant`', function() {
+      describe('`aria-activedescendant`', function () {
         function checkActivedescendant() {
           var activeId = element.find('table').attr('aria-activedescendant');
           expect(element.find('#' + activeId + ' > button')).toHaveClass('active');
         }
 
-        it('updates correctly', function() {
+        it('updates correctly', function () {
           triggerKeyDown(element, 'left');
           checkActivedescendant();
 
@@ -695,17 +695,17 @@ describe('datepicker directive', function () {
   });
 
   describe('attribute `starting-day`', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.startingDay = 1;
       element = $compile('<datepicker ng-model="date" starting-day="startingDay"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('shows the day labels rotated', function() {
+    it('shows the day labels rotated', function () {
       expect(getLabels()).toEqual(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
     });
 
-    it('renders the calendar days correctly', function() {
+    it('renders the calendar days correctly', function () {
       expect(getOptions(true)).toEqual([
         ['30', '31', '01', '02', '03', '04', '05'],
         ['06', '07', '08', '09', '10', '11', '12'],
@@ -716,14 +716,14 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('renders the week numbers correctly', function() {
+    it('renders the week numbers correctly', function () {
       expect(getWeeks()).toEqual(['35', '36', '37', '38', '39', '40']);
     });
   });
 
   describe('attribute `show-weeks`', function () {
     var weekHeader, weekElement;
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.showWeeks = false;
       element = $compile('<datepicker ng-model="date" show-weeks="showWeeks"></datepicker>')($rootScope);
       $rootScope.$digest();
@@ -732,7 +732,7 @@ describe('datepicker directive', function () {
       weekElement = element.find('tbody').find('tr').eq(1).find('td').eq(0);
     });
 
-    it('hides week numbers based on variable', function() {
+    it('hides week numbers based on variable', function () {
       expect(weekHeader.text()).toEqual('');
       expect(weekHeader).toBeHidden();
       expect(weekElement).toBeHidden();
@@ -740,30 +740,30 @@ describe('datepicker directive', function () {
   });
 
   describe('`min-date` attribute', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.mindate = new Date('September 12, 2010');
       element = $compile('<datepicker ng-model="date" min-date="mindate"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('disables appropriate days in current month', function() {
+    it('disables appropriate days in current month', function () {
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index < 14 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index < 14);
       });
     });
 
-    it('disables appropriate days when min date changes', function() {
+    it('disables appropriate days when min date changes', function () {
       $rootScope.mindate = new Date('September 5, 2010');
       $rootScope.$digest();
 
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index < 7 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index < 7);
       });
     });
 
-    it('invalidates when model is a disabled date', function() {
+    it('invalidates when model is a disabled date', function () {
       $rootScope.mindate = new Date('September 5, 2010');
       $rootScope.date = new Date('September 2, 2010');
       $rootScope.$digest();
@@ -771,163 +771,163 @@ describe('datepicker directive', function () {
       expect(element.hasClass('ng-invalid-date-disabled')).toBeTruthy();
     });
 
-    it('disables all days in previous month', function() {
+    it('disables all days in previous month', function () {
       clickPreviousButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( true );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(true);
       });
     });
 
-    it('disables no days in next month', function() {
+    it('disables no days in next month', function () {
       clickNextButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
 
-    it('disables appropriate months in current year', function() {
+    it('disables appropriate months in current year', function () {
       clickTitleButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index < 8 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index < 8);
       });
     });
 
-    it('disables all months in previous year', function() {
+    it('disables all months in previous year', function () {
       clickTitleButton();
       clickPreviousButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( true );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(true);
       });
     });
 
-    it('disables no months in next year', function() {
+    it('disables no months in next year', function () {
       clickTitleButton();
       clickNextButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
 
-    it('enables everything before if it is cleared', function() {
+    it('enables everything before if it is cleared', function () {
       $rootScope.mindate = null;
       $rootScope.date = new Date('December 20, 1949');
       $rootScope.$digest();
 
       clickTitleButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
 
   });
 
   describe('`max-date` attribute', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.maxdate = new Date('September 25, 2010');
       element = $compile('<datepicker ng-model="date" max-date="maxdate"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('disables appropriate days in current month', function() {
+    it('disables appropriate days in current month', function () {
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index > 27 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index > 27);
       });
     });
 
-    it('disables appropriate days when max date changes', function() {
+    it('disables appropriate days when max date changes', function () {
       $rootScope.maxdate = new Date('September 18, 2010');
       $rootScope.$digest();
 
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index > 20 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index > 20);
       });
     });
 
-    it('invalidates when model is a disabled date', function() {
+    it('invalidates when model is a disabled date', function () {
       $rootScope.maxdate = new Date('September 18, 2010');
       $rootScope.$digest();
       expect(element.hasClass('ng-invalid')).toBeTruthy();
       expect(element.hasClass('ng-invalid-date-disabled')).toBeTruthy();
     });
 
-    it('disables no days in previous month', function() {
+    it('disables no days in previous month', function () {
       clickPreviousButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
 
-    it('disables all days in next month', function() {
+    it('disables all days in next month', function () {
       clickNextButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( true );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(true);
       });
     });
 
-    it('disables appropriate months in current year', function() {
+    it('disables appropriate months in current year', function () {
       clickTitleButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( index > 8 );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(index > 8);
       });
     });
 
-    it('disables no months in previous year', function() {
+    it('disables no months in previous year', function () {
       clickTitleButton();
       clickPreviousButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
 
-    it('disables all months in next year', function() {
+    it('disables all months in next year', function () {
       clickTitleButton();
       clickNextButton();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( true );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(true);
       });
     });
 
-    it('enables everything after if it is cleared', function() {
+    it('enables everything after if it is cleared', function () {
       $rootScope.maxdate = null;
       $rootScope.$digest();
       var buttons = getAllOptionsEl();
-      angular.forEach(buttons, function( button, index ) {
-        expect(angular.element(button).prop('disabled')).toBe( false );
+      angular.forEach(buttons, function (button, index) {
+        expect(angular.element(button).prop('disabled')).toBe(false);
       });
     });
   });
 
   describe('date-disabled expression', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.dateDisabledHandler = jasmine.createSpy('dateDisabledHandler');
       element = $compile('<datepicker ng-model="date" date-disabled="dateDisabledHandler(date, mode)"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('executes the dateDisabled expression for each visible day plus one for validation', function() {
+    it('executes the dateDisabled expression for each visible day plus one for validation', function () {
       expect($rootScope.dateDisabledHandler.calls.length).toEqual(42 + 1);
     });
 
-    it('executes the dateDisabled expression for each visible month plus one for validation', function() {
+    it('executes the dateDisabled expression for each visible month plus one for validation', function () {
       $rootScope.dateDisabledHandler.reset();
       clickTitleButton();
       expect($rootScope.dateDisabledHandler.calls.length).toEqual(12 + 1);
     });
 
-    it('executes the dateDisabled expression for each visible year plus one for validation', function() {
+    it('executes the dateDisabled expression for each visible year plus one for validation', function () {
       clickTitleButton();
       $rootScope.dateDisabledHandler.reset();
       clickTitleButton();
@@ -936,24 +936,24 @@ describe('datepicker directive', function () {
   });
 
   describe('formatting', function () {
-    beforeEach(function() {
+    beforeEach(function () {
       $rootScope.dayTitle = 'MMMM, yy';
       element = $compile('<datepicker ng-model="date"' +
-        'format-day="d"' +
-        'format-day-header="EEEE"' +
-        'format-day-title="{{dayTitle}}"' +
-        'format-month="MMM"' +
-        'format-month-title="yy"' +
-        'format-year="yy"' +
-        'year-range="10"></datepicker>')($rootScope);
+      'format-day="d"' +
+      'format-day-header="EEEE"' +
+      'format-day-title="{{dayTitle}}"' +
+      'format-month="MMM"' +
+      'format-month-title="yy"' +
+      'format-year="yy"' +
+      'year-range="10"></datepicker>')($rootScope);
       $rootScope.$digest();
     });
 
-    it('changes the title format in `day` mode', function() {
+    it('changes the title format in `day` mode', function () {
       expect(getTitle()).toBe('September, 10');
     });
 
-    it('changes the title & months format in `month` mode', function() {
+    it('changes the title & months format in `month` mode', function () {
       clickTitleButton();
 
       expect(getTitle()).toBe('10');
@@ -965,7 +965,7 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('changes the title, year format & range in `year` mode', function() {
+    it('changes the title, year format & range in `year` mode', function () {
       clickTitleButton();
       clickTitleButton();
 
@@ -976,11 +976,11 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('shows day labels', function() {
+    it('shows day labels', function () {
       expect(getLabels()).toEqual(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
     });
 
-    it('changes the day format', function() {
+    it('changes the day format', function () {
       expect(getOptions(true)).toEqual([
         ['29', '30', '31', '1', '2', '3', '4'],
         ['5', '6', '7', '8', '9', '10', '11'],
@@ -992,9 +992,9 @@ describe('datepicker directive', function () {
     });
   });
 
-  describe('setting datepickerConfig', function() {
+  describe('setting datepickerConfig', function () {
     var originalConfig = {};
-    beforeEach(inject(function(datepickerConfig) {
+    beforeEach(inject(function (datepickerConfig) {
       angular.extend(originalConfig, datepickerConfig);
       datepickerConfig.formatDay = 'd';
       datepickerConfig.formatMonth = 'MMM';
@@ -1009,16 +1009,16 @@ describe('datepicker directive', function () {
       element = $compile('<datepicker ng-model="date"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
-    afterEach(inject(function(datepickerConfig) {
+    afterEach(inject(function (datepickerConfig) {
       // return it to the original state
       angular.extend(datepickerConfig, originalConfig);
     }));
 
-    it('changes the title format in `day` mode', function() {
+    it('changes the title format in `day` mode', function () {
       expect(getTitle()).toBe('Sep, 10');
     });
 
-    it('changes the title & months format in `month` mode', function() {
+    it('changes the title & months format in `month` mode', function () {
       clickTitleButton();
 
       expect(getTitle()).toBe('10');
@@ -1030,7 +1030,7 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('changes the title, year format & range in `year` mode', function() {
+    it('changes the title, year format & range in `year` mode', function () {
       clickTitleButton();
       clickTitleButton();
 
@@ -1041,7 +1041,7 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('changes the `starting-day` & day headers & format', function() {
+    it('changes the `starting-day` & day headers & format', function () {
       expect(getLabels()).toEqual(['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
       expect(getOptions(true)).toEqual([
         ['28', '29', '30', '31', '1', '2', '3'],
@@ -1053,7 +1053,7 @@ describe('datepicker directive', function () {
       ]);
     });
 
-    it('changes initial visibility for weeks', function() {
+    it('changes initial visibility for weeks', function () {
       expect(getLabelsRow().find('th').eq(0)).toBeHidden();
       var tr = element.find('tbody').find('tr');
       for (var i = 0; i < 5; i++) {
@@ -1063,21 +1063,21 @@ describe('datepicker directive', function () {
 
   });
 
-  describe('setting datepickerPopupConfig', function() {
+  describe('setting datepickerPopupConfig', function () {
     var originalConfig = {};
-    beforeEach(inject(function(datepickerPopupConfig) {
+    beforeEach(inject(function (datepickerPopupConfig) {
       angular.extend(originalConfig, datepickerPopupConfig);
       datepickerPopupConfig.datepickerPopup = 'MM-dd-yyyy';
 
       element = $compile('<input ng-model="date" datepicker-popup>')($rootScope);
       $rootScope.$digest();
     }));
-    afterEach(inject(function(datepickerPopupConfig) {
+    afterEach(inject(function (datepickerPopupConfig) {
       // return it to the original state
       angular.extend(datepickerPopupConfig, originalConfig);
     }));
 
-    it('changes date format', function() {
+    it('changes date format', function () {
       expect(element.val()).toEqual('09-30-2010');
     });
 
@@ -1099,7 +1099,7 @@ describe('datepicker directive', function () {
     }
 
     describe('initially', function () {
-      beforeEach(inject(function(_$document_, _$sniffer_) {
+      beforeEach(inject(function (_$document_, _$sniffer_) {
         $document = _$document_;
         $rootScope.isopen = true;
         $rootScope.date = new Date('September 30, 2010 15:30:00');
@@ -1108,17 +1108,17 @@ describe('datepicker directive', function () {
         assignElements(wrapElement);
       }));
 
-      it('does not to display datepicker initially', function() {
+      it('does not to display datepicker initially', function () {
         expect(dropdownEl).toBeHidden();
       });
 
-      it('to display the correct value in input', function() {
+      it('to display the correct value in input', function () {
         expect(inputEl.val()).toBe('2010-09-30');
       });
     });
 
     describe('initially opened', function () {
-      beforeEach(inject(function(_$document_, _$sniffer_) {
+      beforeEach(inject(function (_$document_, _$sniffer_) {
         $document = _$document_;
         $sniffer = _$sniffer_;
         $rootScope.isopen = true;
@@ -1128,11 +1128,11 @@ describe('datepicker directive', function () {
         assignElements(wrapElement);
       }));
 
-      it('datepicker is displayed', function() {
+      it('datepicker is displayed', function () {
         expect(dropdownEl).not.toBeHidden();
       });
 
-      it('renders the calendar correctly', function() {
+      it('renders the calendar correctly', function () {
         expect(getLabelsRow().css('display')).not.toBe('none');
         expect(getLabels()).toEqual(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
         expect(getOptions(true)).toEqual([
@@ -1145,32 +1145,32 @@ describe('datepicker directive', function () {
         ]);
       });
 
-      it('updates the input when a day is clicked', function() {
+      it('updates the input when a day is clicked', function () {
         clickOption(17);
         expect(inputEl.val()).toBe('2010-09-15');
         expect($rootScope.date).toEqual(new Date('September 15, 2010 15:30:00'));
       });
 
-      it('should mark the input field dirty when a day is clicked', function() {
+      it('should mark the input field dirty when a day is clicked', function () {
         expect(inputEl).toHaveClass('ng-pristine');
         clickOption(17);
         expect(inputEl).toHaveClass('ng-dirty');
       });
 
-      it('updates the input correctly when model changes', function() {
+      it('updates the input correctly when model changes', function () {
         $rootScope.date = new Date('January 10, 1983 10:00:00');
         $rootScope.$digest();
         expect(inputEl.val()).toBe('1983-01-10');
       });
 
-      it('closes the dropdown when a day is clicked', function() {
+      it('closes the dropdown when a day is clicked', function () {
         expect(dropdownEl.css('display')).not.toBe('none');
 
         clickOption(17);
         expect(dropdownEl.css('display')).toBe('none');
       });
 
-      it('updates the model & calendar when input value changes', function() {
+      it('updates the model & calendar when input value changes', function () {
         changeInputValueTo(inputEl, 'March 5, 1980');
 
         expect($rootScope.date.getFullYear()).toEqual(1980);
@@ -1185,17 +1185,17 @@ describe('datepicker directive', function () {
           ['23', '24', '25', '26', '27', '28', '29'],
           ['30', '31', '01', '02', '03', '04', '05']
         ]);
-        expectSelectedElement( 10 );
+        expectSelectedElement(10);
       });
 
-      it('closes when click outside of calendar', function() {
+      it('closes when click outside of calendar', function () {
         expect(dropdownEl).not.toBeHidden();
 
         $document.find('body').click();
         expect(dropdownEl.css('display')).toBe('none');
       });
 
-      it('sets `ng-invalid` for invalid input', function() {
+      it('sets `ng-invalid` for invalid input', function () {
         changeInputValueTo(inputEl, 'pizza');
 
         expect(inputEl).toHaveClass('ng-invalid');
@@ -1204,7 +1204,7 @@ describe('datepicker directive', function () {
         expect(inputEl.val()).toBe('pizza');
       });
 
-      it('unsets `ng-invalid` for valid input', function() {
+      it('unsets `ng-invalid` for valid input', function () {
         changeInputValueTo(inputEl, 'pizza');
         expect(inputEl).toHaveClass('ng-invalid-date');
 
@@ -1215,18 +1215,18 @@ describe('datepicker directive', function () {
       });
 
       describe('focus', function () {
-        beforeEach(function() {
+        beforeEach(function () {
           var body = $document.find('body');
           body.append(inputEl);
           body.append(dropdownEl);
         });
 
-        afterEach(function() {
+        afterEach(function () {
           inputEl.remove();
           dropdownEl.remove();
         });
 
-        it('returns to the input when ESC key is pressed in the popup and closes', function() {
+        it('returns to the input when ESC key is pressed in the popup and closes', function () {
           expect(dropdownEl).not.toBeHidden();
 
           dropdownEl.find('button').eq(0).focus();
@@ -1237,7 +1237,7 @@ describe('datepicker directive', function () {
           expect(document.activeElement.tagName).toBe('INPUT');
         });
 
-        it('returns to the input when ESC key is pressed in the input and closes', function() {
+        it('returns to the input when ESC key is pressed in the input and closes', function () {
           expect(dropdownEl).not.toBeHidden();
 
           dropdownEl.find('button').eq(0).focus();
@@ -1253,7 +1253,7 @@ describe('datepicker directive', function () {
 
     describe('attribute `datepickerOptions`', function () {
       var weekHeader, weekElement;
-      beforeEach(function() {
+      beforeEach(function () {
         $rootScope.opts = {
           'show-weeks': false
         };
@@ -1265,7 +1265,7 @@ describe('datepicker directive', function () {
         weekElement = element.find('tbody').find('tr').eq(1).find('td').eq(0);
       });
 
-      it('hides week numbers based on variable', function() {
+      it('hides week numbers based on variable', function () {
         expect(weekHeader.text()).toEqual('');
         expect(weekHeader).toBeHidden();
         expect(weekElement).toBeHidden();
@@ -1273,18 +1273,18 @@ describe('datepicker directive', function () {
     });
 
     describe('toggles programatically by `open` attribute', function () {
-      beforeEach(inject(function() {
+      beforeEach(inject(function () {
         $rootScope.open = true;
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup is-open="open"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
 
-      it('to display initially', function() {
+      it('to display initially', function () {
         expect(dropdownEl.css('display')).not.toBe('none');
       });
 
-      it('to close / open from scope variable', function() {
+      it('to close / open from scope variable', function () {
         expect(dropdownEl.css('display')).not.toBe('none');
         $rootScope.open = false;
         $rootScope.$digest();
@@ -1297,23 +1297,23 @@ describe('datepicker directive', function () {
     });
 
     describe('custom format', function () {
-      beforeEach(inject(function() {
+      beforeEach(inject(function () {
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup="dd-MMMM-yyyy"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
 
-      it('to display the correct value in input', function() {
+      it('to display the correct value in input', function () {
         expect(inputEl.val()).toBe('30-September-2010');
       });
 
-      it('updates the input when a day is clicked', function() {
+      it('updates the input when a day is clicked', function () {
         clickOption(17);
         expect(inputEl.val()).toBe('15-September-2010');
         expect($rootScope.date).toEqual(new Date('September 15, 2010 15:30:00'));
       });
 
-      it('updates the input correctly when model changes', function() {
+      it('updates the input correctly when model changes', function () {
         $rootScope.date = new Date('January 10, 1983 10:00:00');
         $rootScope.$digest();
         expect(inputEl.val()).toBe('10-January-1983');
@@ -1321,30 +1321,30 @@ describe('datepicker directive', function () {
     });
 
     describe('dynamic custom format', function () {
-      beforeEach(inject(function() {
+      beforeEach(inject(function () {
         $rootScope.format = 'dd-MMMM-yyyy';
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup="{{format}}"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
 
-      it('to display the correct value in input', function() {
+      it('to display the correct value in input', function () {
         expect(inputEl.val()).toBe('30-September-2010');
       });
 
-      it('updates the input when a day is clicked', function() {
+      it('updates the input when a day is clicked', function () {
         clickOption(17);
         expect(inputEl.val()).toBe('15-September-2010');
         expect($rootScope.date).toEqual(new Date('September 15, 2010 15:30:00'));
       });
 
-      it('updates the input correctly when model changes', function() {
+      it('updates the input correctly when model changes', function () {
         $rootScope.date = new Date('August 11, 2013 09:09:00');
         $rootScope.$digest();
         expect(inputEl.val()).toBe('11-August-2013');
       });
 
-      it('updates the input correctly when format changes', function() {
+      it('updates the input correctly when format changes', function () {
         $rootScope.format = 'dd/MM/yyyy';
         $rootScope.$digest();
         expect(inputEl.val()).toBe('30/09/2010');
@@ -1352,7 +1352,7 @@ describe('datepicker directive', function () {
     });
 
     describe('european format', function () {
-      it('dd.MM.yyyy', function() {
+      it('dd.MM.yyyy', function () {
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup="dd.MM.yyyy"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
@@ -1365,20 +1365,20 @@ describe('datepicker directive', function () {
     });
 
     describe('`close-on-date-selection` attribute', function () {
-      beforeEach(inject(function() {
+      beforeEach(inject(function () {
         $rootScope.close = false;
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup close-on-date-selection="close" is-open="true"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
 
-      it('does not close the dropdown when a day is clicked', function() {
+      it('does not close the dropdown when a day is clicked', function () {
         clickOption(17);
         expect(dropdownEl.css('display')).not.toBe('none');
       });
     });
 
-    describe('button bar', function() {
+    describe('button bar', function () {
       var buttons, buttonBarElement;
 
       function assignButtonBar() {
@@ -1387,7 +1387,7 @@ describe('datepicker directive', function () {
       }
 
       describe('', function () {
-        beforeEach(inject(function() {
+        beforeEach(inject(function () {
           $rootScope.isopen = true;
           var wrapElement = $compile('<div><input ng-model="date" datepicker-popup is-open="isopen"><div>')($rootScope);
           $rootScope.$digest();
@@ -1395,12 +1395,12 @@ describe('datepicker directive', function () {
           assignButtonBar();
         }));
 
-        it('should exist', function() {
+        it('should exist', function () {
           expect(dropdownEl).not.toBeHidden();
           expect(dropdownEl.find('li').length).toBe(2);
         });
 
-        it('should have three buttons', function() {
+        it('should have three buttons', function () {
           expect(buttons.length).toBe(3);
 
           expect(buttons.eq(0).text()).toBe('Today');
@@ -1408,7 +1408,7 @@ describe('datepicker directive', function () {
           expect(buttons.eq(2).text()).toBe('Done');
         });
 
-        it('should have a button to set today date without altering time part', function() {
+        it('should have a button to set today date without altering time part', function () {
           var today = new Date();
           buttons.eq(0).click();
           expect($rootScope.date.getFullYear()).toBe(today.getFullYear());
@@ -1420,7 +1420,7 @@ describe('datepicker directive', function () {
           expect($rootScope.date.getSeconds()).toBe(0);
         });
 
-        it('should have a button to set today date if blank', function() {
+        it('should have a button to set today date if blank', function () {
           $rootScope.date = null;
           $rootScope.$digest();
 
@@ -1435,19 +1435,19 @@ describe('datepicker directive', function () {
           expect($rootScope.date.getSeconds()).toBe(0);
         });
 
-        it('should have a button to clear value', function() {
+        it('should have a button to clear value', function () {
           buttons.eq(1).click();
           expect($rootScope.date).toBe(null);
         });
 
-        it('should have a button to close calendar', function() {
+        it('should have a button to close calendar', function () {
           buttons.eq(2).click();
           expect(dropdownEl).toBeHidden();
         });
       });
 
-      describe('customization', function() {
-        it('should change text from attributes', function() {
+      describe('customization', function () {
+        it('should change text from attributes', function () {
           $rootScope.clearText = 'Null it!';
           $rootScope.close = 'Close';
           var wrapElement = $compile('<div><input ng-model="date" datepicker-popup current-text="Now" clear-text="{{clearText}}" close-text="{{close}}ME"><div>')($rootScope);
@@ -1460,7 +1460,7 @@ describe('datepicker directive', function () {
           expect(buttons.eq(2).text()).toBe('CloseME');
         });
 
-        it('should remove bar', function() {
+        it('should remove bar', function () {
           $rootScope.showBar = false;
           var wrapElement = $compile('<div><input ng-model="date" datepicker-popup show-button-bar="showBar"><div>')($rootScope);
           $rootScope.$digest();
@@ -1469,8 +1469,8 @@ describe('datepicker directive', function () {
         });
       });
 
-      describe('`ng-change`', function() {
-        beforeEach(inject(function() {
+      describe('`ng-change`', function () {
+        beforeEach(inject(function () {
           $rootScope.changeHandler = jasmine.createSpy('changeHandler');
           var wrapElement = $compile('<div><input ng-model="date" datepicker-popup ng-change="changeHandler()"><div>')($rootScope);
           $rootScope.$digest();
@@ -1478,43 +1478,43 @@ describe('datepicker directive', function () {
           assignButtonBar();
         }));
 
-        it('should be called when `today` is clicked', function() {
+        it('should be called when `today` is clicked', function () {
           buttons.eq(0).click();
           expect($rootScope.changeHandler).toHaveBeenCalled();
         });
 
-        it('should be called when `clear` is clicked', function() {
+        it('should be called when `clear` is clicked', function () {
           buttons.eq(1).click();
           expect($rootScope.changeHandler).toHaveBeenCalled();
         });
 
-        it('should not be called when `close` is clicked', function() {
+        it('should not be called when `close` is clicked', function () {
           buttons.eq(2).click();
           expect($rootScope.changeHandler).not.toHaveBeenCalled();
         });
       });
     });
 
-    describe('use with `ng-required` directive', function() {
-      beforeEach(inject(function() {
+    describe('use with `ng-required` directive', function () {
+      beforeEach(inject(function () {
         $rootScope.date = '';
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup ng-required="true"><div>')($rootScope);
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
 
-      it('should be invalid initially', function() {
+      it('should be invalid initially', function () {
         expect(inputEl.hasClass('ng-invalid')).toBeTruthy();
       });
-      it('should be valid if model has been specified', function() {
+      it('should be valid if model has been specified', function () {
         $rootScope.date = new Date();
         $rootScope.$digest();
         expect(inputEl.hasClass('ng-valid')).toBeTruthy();
       });
     });
 
-    describe('use with `ng-change` directive', function() {
-      beforeEach(inject(function() {
+    describe('use with `ng-change` directive', function () {
+      beforeEach(inject(function () {
         $rootScope.changeHandler = jasmine.createSpy('changeHandler');
         $rootScope.date = new Date();
         var wrapElement = $compile('<div><input ng-model="date" datepicker-popup ng-required="true" ng-change="changeHandler()"><div>')($rootScope);
@@ -1522,24 +1522,24 @@ describe('datepicker directive', function () {
         assignElements(wrapElement);
       }));
 
-      it('should not be called initially', function() {
+      it('should not be called initially', function () {
         expect($rootScope.changeHandler).not.toHaveBeenCalled();
       });
 
-      it('should be called when a day is clicked', function() {
+      it('should be called when a day is clicked', function () {
         clickOption(17);
         expect($rootScope.changeHandler).toHaveBeenCalled();
       });
 
-      it('should not be called when model changes programatically', function() {
+      it('should not be called when model changes programatically', function () {
         $rootScope.date = new Date();
         $rootScope.$digest();
         expect($rootScope.changeHandler).not.toHaveBeenCalled();
       });
     });
 
-    describe('with an append-to-body attribute', function() {
-      beforeEach(function() {
+    describe('with an append-to-body attribute', function () {
+      beforeEach(function () {
         $rootScope.date = new Date();
       });
 
@@ -1547,25 +1547,25 @@ describe('datepicker directive', function () {
         $document.find('body').find('.dropdown-menu').remove();
       });
 
-      it('should append to the body', function() {
+      it('should append to the body', function () {
         var $body = $document.find('body'),
-            bodyLength = $body.children().length,
-            elm = angular.element(
-              '<div><input datepicker-popup ng-model="date" datepicker-append-to-body="true"></input></div>'
-            );
+          bodyLength = $body.children().length,
+          elm = angular.element(
+            '<div><input datepicker-popup ng-model="date" datepicker-append-to-body="true"></input></div>'
+          );
         $compile(elm)($rootScope);
         $rootScope.$digest();
 
         expect($body.children().length).toEqual(bodyLength + 1);
         expect(elm.children().length).toEqual(1);
       });
-      it('should be removed on scope destroy', function() {
+      it('should be removed on scope destroy', function () {
         var $body = $document.find('body'),
-            bodyLength = $body.children().length,
-            isolatedScope = $rootScope.$new(),
-            elm = angular.element(
-              '<input datepicker-popup ng-model="date" datepicker-append-to-body="true"></input>'
-            );
+          bodyLength = $body.children().length,
+          isolatedScope = $rootScope.$new(),
+          elm = angular.element(
+            '<input datepicker-popup ng-model="date" datepicker-append-to-body="true"></input>'
+          );
         $compile(elm)(isolatedScope);
         isolatedScope.$digest();
         expect($body.children().length).toEqual(bodyLength + 1);
@@ -1574,9 +1574,9 @@ describe('datepicker directive', function () {
       });
     });
 
-    describe('with setting datepickerConfig.showWeeks to false', function() {
+    describe('with setting datepickerConfig.showWeeks to false', function () {
       var originalConfig = {};
-      beforeEach(inject(function(datepickerConfig) {
+      beforeEach(inject(function (datepickerConfig) {
         angular.extend(originalConfig, datepickerConfig);
         datepickerConfig.showWeeks = false;
 
@@ -1584,12 +1584,12 @@ describe('datepicker directive', function () {
         $rootScope.$digest();
         assignElements(wrapElement);
       }));
-      afterEach(inject(function(datepickerConfig) {
+      afterEach(inject(function (datepickerConfig) {
         // return it to the original state
         angular.extend(datepickerConfig, originalConfig);
       }));
 
-      it('changes initial visibility for weeks', function() {
+      it('changes initial visibility for weeks', function () {
         expect(getLabelsRow().find('th').eq(0)).toBeHidden();
         var tr = element.find('tbody').find('tr');
         for (var i = 0; i < 5; i++) {
@@ -1600,21 +1600,21 @@ describe('datepicker directive', function () {
   });
 
   describe('with empty initial state', function () {
-    beforeEach(inject(function() {
+    beforeEach(inject(function () {
       $rootScope.date = null;
       element = $compile('<datepicker ng-model="date"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
 
-    it('is has a `<table>` element', function() {
+    it('is has a `<table>` element', function () {
       expect(element.find('table').length).toBe(1);
     });
 
-    it('is shows rows with days', function() {
+    it('is shows rows with days', function () {
       expect(element.find('tbody').find('tr').length).toBeGreaterThan(3);
     });
 
-    it('sets default 00:00:00 time for selected date', function() {
+    it('sets default 00:00:00 time for selected date', function () {
       $rootScope.date = new Date('August 1, 2013');
       $rootScope.$digest();
       $rootScope.date = null;
@@ -1626,51 +1626,51 @@ describe('datepicker directive', function () {
   });
 
   describe('`init-date`', function () {
-    beforeEach(inject(function() {
+    beforeEach(inject(function () {
       $rootScope.date = null;
       $rootScope.initDate = new Date('November 9, 1980');
       element = $compile('<datepicker ng-model="date" init-date="initDate"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
 
-    it('does not alter the model', function() {
+    it('does not alter the model', function () {
       expect($rootScope.date).toBe(null);
     });
 
-    it('shows the correct title', function() {
+    it('shows the correct title', function () {
       expect(getTitle()).toBe('November 1980');
     });
   });
 
   describe('`datepicker-mode`', function () {
-    beforeEach(inject(function() {
+    beforeEach(inject(function () {
       $rootScope.date = new Date('August 11, 2013');
       $rootScope.mode = 'month';
       element = $compile('<datepicker ng-model="date" datepicker-mode="mode"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
 
-    it('shows the correct title', function() {
+    it('shows the correct title', function () {
       expect(getTitle()).toBe('2013');
     });
 
-    it('updates binding', function() {
+    it('updates binding', function () {
       clickTitleButton();
       expect($rootScope.mode).toBe('year');
     });
   });
 
   describe('`min-mode`', function () {
-    beforeEach(inject(function() {
+    beforeEach(inject(function () {
       $rootScope.date = new Date('August 11, 2013');
       $rootScope.mode = 'month';
       element = $compile('<datepicker ng-model="date" min-mode="month" datepicker-mode="mode"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
 
-    it('does not move below it', function() {
+    it('does not move below it', function () {
       expect(getTitle()).toBe('2013');
-      clickOption( 5 );
+      clickOption(5);
       expect(getTitle()).toBe('2013');
       clickTitleButton();
       expect(getTitle()).toBe('2001 - 2020');
@@ -1678,13 +1678,13 @@ describe('datepicker directive', function () {
   });
 
   describe('`max-mode`', function () {
-    beforeEach(inject(function() {
+    beforeEach(inject(function () {
       $rootScope.date = new Date('August 11, 2013');
       element = $compile('<datepicker ng-model="date" max-mode="month"></datepicker>')($rootScope);
       $rootScope.$digest();
     }));
 
-    it('does not move above it', function() {
+    it('does not move above it', function () {
       expect(getTitle()).toBe('August 2013');
       clickTitleButton();
       expect(getTitle()).toBe('2013');

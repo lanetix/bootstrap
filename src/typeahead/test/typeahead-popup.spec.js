@@ -2,7 +2,7 @@ describe('typeaheadPopup - result rendering', function () {
 
   var scope, $rootScope, $compile;
 
-  beforeEach(module('ui.bootstrap.typeahead'));
+  beforeEach(module('lx.ui.bootstrap.typeahead'));
   beforeEach(module('template/typeahead/typeahead-popup.html'));
   beforeEach(module('template/typeahead/typeahead-match.html'));
   beforeEach(inject(function (_$rootScope_, _$compile_) {

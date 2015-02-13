@@ -1,25 +1,25 @@
 describe('position elements', function () {
 
-  var TargetElMock = function(width, height) {
+  var TargetElMock = function (width, height) {
     this.width = width;
     this.height = height;
 
-    this.prop = function(propName) {
+    this.prop = function (propName) {
       return propName === 'offsetWidth' ? width : height;
     };
   };
 
   var $position;
 
-  beforeEach(module('ui.bootstrap.position'));
+  beforeEach(module('lx.ui.bootstrap.position'));
   beforeEach(inject(function (_$position_) {
     $position = _$position_;
   }));
   beforeEach(function () {
     this.addMatchers({
-      toBePositionedAt: function(top, left) {
-        this.message = function() {
-          return 'Expected "('  + this.actual.top + ', ' + this.actual.left +  ')" to be positioned at (' + top + ', ' + left + ')';
+      toBePositionedAt: function (top, left) {
+        this.message = function () {
+          return 'Expected "(' + this.actual.top + ', ' + this.actual.left + ')" to be positioned at (' + top + ', ' + left + ')';
         };
 
         return this.actual.top == top && this.actual.left == left;
@@ -32,7 +32,7 @@ describe('position elements', function () {
 
     beforeEach(function () {
       //mock position info normally queried from the DOM
-      $position.position = function() {
+      $position.position = function () {
         return {
           width: 20,
           height: 20,

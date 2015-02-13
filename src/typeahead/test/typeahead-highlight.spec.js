@@ -2,7 +2,7 @@ describe('typeaheadHighlight', function () {
 
   var highlightFilter;
 
-  beforeEach(module('ui.bootstrap.typeahead'));
+  beforeEach(module('lx.ui.bootstrap.typeahead'));
   beforeEach(inject(function (typeaheadHighlightFilter) {
     highlightFilter = typeaheadHighlightFilter;
   }));

@@ -20,7 +20,7 @@ Don't worry, if you are not sure which file to take, opt for `ui-bootstrap-tpls-
 When you are done downloading all the dependencies and project files the only remaining part is to add dependencies on the `ui.bootstrap` AngularJS module:
 
 ```javascript
-angular.module('myModule', ['ui.bootstrap']);
+angular.module('myModule', ['lx.ui.bootstrap']);
 ```
 
 Project files are also available through your favourite package manager:
@@ -155,7 +155,7 @@ Make sure to load your template.js file
 Inject the `ui-templates` module in your `app.js`
 ```
 angular.module('myApp', [
-  'ui.bootstrap',
+  'lx.ui.bootstrap',
   'ui-templates'
 ]);
 ```

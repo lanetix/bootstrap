@@ -1,4 +1,4 @@
-angular.module('ui.bootstrap.position', [])
+angular.module('lx.ui.bootstrap.position', [])
 
 /**
  * A set of utility methods that can be use to retrieve position of DOM elements.
@@ -33,7 +33,7 @@ angular.module('ui.bootstrap.position', [])
     var parentOffsetEl = function (element) {
       var docDomEl = $document[0];
       var offsetParent = element.offsetParent || docDomEl;
-      while (offsetParent && offsetParent !== docDomEl && isStaticPositioned(offsetParent) ) {
+      while (offsetParent && offsetParent !== docDomEl && isStaticPositioned(offsetParent)) {
         offsetParent = offsetParent.offsetParent;
       }
       return offsetParent || docDomEl;
@@ -46,7 +46,7 @@ angular.module('ui.bootstrap.position', [])
        */
       position: function (element) {
         var elBCR = this.offset(element);
-        var offsetParentBCR = { top: 0, left: 0 };
+        var offsetParentBCR = {top: 0, left: 0};
         var offsetParentEl = parentOffsetEl(element[0]);
         if (offsetParentEl != $document[0]) {
           offsetParentBCR = this.offset(angular.element(offsetParentEl));
