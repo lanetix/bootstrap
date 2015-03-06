@@ -134,6 +134,9 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
           //but we are interested only in responses that correspond to the current view value
           var onCurrentRequest = (inputValue === modelCtrl.$viewValue);
           if (onCurrentRequest && hasFocus) {
+            if (!matches) {
+              return;
+            }
             if (matches.length > 0) {
 
               scope.activeIdx = 0;
